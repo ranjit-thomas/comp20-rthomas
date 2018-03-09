@@ -15,10 +15,38 @@
 
 <script>
 
+	var videoElement = document.getElementsByTagName("video")[0];
+	var caption = document.getElementsByTagName("div")[0];
+
 	function updateText()
 	{
-		var videoElement = document.getElementById("video")
+		if (videoElement.currentTime > 0.0 && videoElement.currentTime < 0.2)
+		{
+			var newText = document.createTextNode("");
+			var newElement = document.createElement("P");
+			newElement.appendChild(newText);
+			caption.appendChild(newElement);
+			console.log("hello");
+		}
+
+		if (videoElement.currentTime > 0.0 && videoElement.currentTime <= 18.0)
+		{
+			caption.firstChild.firstChild.data = "Intro";
+		}
+
+		if (videoElement.currentTime > 18.0 && videoElement.currentTime <= 22.0)
+		{
+			caption.firstChild.firstChild.data = "We're no strangers to love.";
+		}
+
+		if (videoElement.currentTime > 22.0 && videoElement.currentTime <= 26.0)
+		{
+			caption.firstChild.firstChild.data = "You know the rules and so do I.";
+		}
+
 	}
+
+	videoElement.addEventListener("timeupdate", updateText);
 
 </script>
 </body>
