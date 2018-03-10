@@ -14,13 +14,29 @@
 
 		<script>
 			var map;
+			var position;
+
 			function initMap() {
 
 				map = new google.maps.Map(document.getElementById("map"), {
 					center: {lat: 42.424, lng: -71.109},
 					zoom: 8
-				});
+				});				
 			}
+
+			function sendPosition(pos) {
+
+				var coordinates = pos.coords;
+				alert(coordinates.latitude);
+			}
+
+			function error(err) {
+  			
+  				console.warn(`ERROR(${err.code}): ${err.message}`);
+			}
+
+			navigator.geolocation.getCurrentPosition(sendPosition, error);
+
 		</script>
 
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBAG9-NN0g7_kF0H4iigo8SWXN2cZl7iQ&callback=initMap"></script>
