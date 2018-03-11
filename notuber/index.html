@@ -16,21 +16,43 @@
 			var map;
 			var coordinates;
 			var me;
-			var myFeature;
 			var marker;
+			var myImage;
+			var myInfoWindow;
+			var xhr
 
 			function sendPosition(pos) {
 
 				coordinates = pos.coords;
 				map.setCenter( {lat: coordinates.latitude, lng: coordinates.longitude});
+				myImage = "https://cdn3.iconfinder.com/data/icons/map/500/around_me-128.png"
+
 				marker = new google.maps.Marker({
 
 					position: new google.maps.LatLng(coordinates.latitude, coordinates.longitude),
 					map: map,
-					title: ("Hello World")
+					icon: myImage
 				})
-				//myFeature = map.data.add();
-				//myFeature.setGeometry(newGeometry: );
+				
+				myInfoWindow = new google.maps.InfoWindow({
+				content: "Hello!!!!"
+				});
+
+				myInfoWindow.open(map, marker);
+
+				xhr = new XMLHttpRequest();
+				xhr.open("Post", "https://jordan-marsh.herokuapp.com/rides", true);
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.onreadystatechange = function(){
+
+					if(xhr.readyState == 4 && xhr.status == 200){
+
+						console.log(xhr.responseText);
+					}
+				}
+
+				xhr.send("username=oSsnoj2RLW&lat=" + coordinates.latitude + "&lng=" + coordinates.longitude);
+
 			}
 
 			function error(err) {
@@ -45,7 +67,7 @@
 
 				map = new google.maps.Map(document.getElementById("map"), {
 					center: {lat: 42.424, lng: -71.109},
-					zoom: 12
+					zoom: 16
 				});				
 			}
 
