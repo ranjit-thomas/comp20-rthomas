@@ -15,12 +15,24 @@
 		<script>
 			var map;
 			var coordinates;
-			var me;
-			var marker;
-			var myIcon;
-			var myInfoWindow;
 			var xhr;
-			var icon;
+
+			function addVehicle(vehicle) {
+
+				icon = {
+
+					url: "car.png",
+					scaledSize: new google.maps.Size(18.75, 43.75)
+
+				}
+
+				tempMarker = new google.maps.Marker({
+
+					position: new google.maps.LatLng(vehicle.lat, vehicle.lng),
+					map: map,
+					icon: icon
+				})
+			}
 
 			function addPassenger(passenger) {
 
@@ -30,7 +42,7 @@
 					scaledSize: new google.maps.Size(35, 35)
 				}
 
-				var tempMarker = new google.maps.Marker({
+				tempMarker = new google.maps.Marker({
 
 					position: new google.maps.LatLng(passenger.lat, passenger.lng),
 					map: map,
@@ -70,7 +82,7 @@
 					scaledSize: new google.maps.Size(75, 75)
 				}
 
-				marker = new google.maps.Marker({
+				myMarker = new google.maps.Marker({
 
 					position: new google.maps.LatLng(coordinates.latitude, coordinates.longitude),
 					map: map,
@@ -78,10 +90,11 @@
 				})
 				
 				myInfoWindow = new google.maps.InfoWindow({
-				content: "Hello!!!!"
+					
+					content: "Hello!!!!"
 				});
 
-				myInfoWindow.open(map, marker);
+				myInfoWindow.open(map, myMarker);
 
 				xhr = new XMLHttpRequest();
 				xhr.open("Post", "https://jordan-marsh.herokuapp.com/rides", true);
