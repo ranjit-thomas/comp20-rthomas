@@ -16,8 +16,31 @@
 			var map;
 			var coordinates;
 			var xhr;
+			var smallestDistance = 10000000000;
 
-			function addVehicle(vehicle, tempMarker) {
+			function toRadians(angle) {
+
+				return angle * (Math.PI / 180)
+			}
+
+			function calculateDistance(lat1, lon1, lat2, lon2){
+
+				var R = 6371e3;
+				var φ1 = toRadians(lat1);
+				var φ2 = toRadians(lat2);
+				var Δφ = toRadians(lat2-lat1);
+				var Δλ = toRadians(lon2-lon1);
+
+				var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+				        Math.cos(φ1) * Math.cos(φ2) *
+				        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+				var d = R * c;
+				return d;
+			}
+
+			function addVehicle(vehicle, tempMarker, tempWindow) {
 
 				icon = {
 
@@ -32,9 +55,19 @@
 					map: map,
 					icon: icon
 				})
+
+				tempWindow = new google.maps.InfoWindow({
+
+//					content: "some dead man"
+  				});
+
+  				tempMarker.addListener("click", function(){
+
+  					tempWindow.open(map, tempMarker);
+  				});
 			}
 
-			function addPassenger(passenger, tempMarker) {
+			function addPassenger(passenger, tempMarker, tempWindow) {
 
 				icon = {
 
@@ -49,14 +82,17 @@
 					icon: icon
 				})
 
-				infoWindow = new google.maps.InfoWindow({
+				distance = calculateDistance(passenger.lat, passenger.lng, coordinates.latitude, coordinates.longitude);
+				content = "username: " + passenger.username + "<br/>" + "distance away from me: " + distance + " meters"
 
-					content: "some dead man"
+				tempWindow = new google.maps.InfoWindow({
+
+					content: content
   				});
 
   				tempMarker.addListener("click", function(){
 
-  					infoWindow.open(map, tempMarker);
+  					tempWindow.open(map, tempMarker);
   				});
 			}
 
@@ -67,18 +103,22 @@
 				if (doneParsing.passengers.length == undefined){
 
 					tempMarker = new Array (doneParsing.vehicles.length)
+					tempWindow = new Array (doneParsing.vehicles.length)
+
 					for (i = 0; i < doneParsing.vehicles.length; ++i) {
 
-						addVehicle(doneParsing.vehicles[i], tempMarker[i]);
+						addVehicle(doneParsing.vehicles[i], tempMarker[i], tempWindow[i]);
 					}
 				}
 
 				else{
 
 					tempMarker = new Array (doneParsing.passengers.length)
+					tempWindow = new Array (doneParsing.passengers.length)
+
 					for (i = 0; i < doneParsing.passengers.length; ++i) {
 
-						addPassenger(doneParsing.passengers[i], tempMarker[i]);
+						addPassenger(doneParsing.passengers[i], tempMarker[i], tempWindow[i]);
 					}					
 				}
 			}
@@ -146,6 +186,7 @@
 		</script>
 
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBAG9-NN0g7_kF0H4iigo8SWXN2cZl7iQ&callback=initMap"></script>
+
 	</body>
 
 </html>
