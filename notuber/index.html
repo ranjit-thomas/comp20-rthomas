@@ -17,18 +17,24 @@
 			var coordinates;
 			var me;
 			var marker;
-			var myImage;
+			var myIcon;
 			var myInfoWindow;
 			var xhr;
-			var tempMarker
+			var icon;
 
 			function addPassenger(passenger) {
 
-				tempMarker = new google.maps.Marker({
+				icon = {
 
-				position: new google.maps.LatLng(passenger.lat, passenger.lng),
-				map: map
-			
+					url: "https://cdn4.iconfinder.com/data/icons/dot/128/taxi_passanger.png",
+					scaledSize: new google.maps.Size(35, 35)
+				}
+
+				var tempMarker = new google.maps.Marker({
+
+					position: new google.maps.LatLng(passenger.lat, passenger.lng),
+					map: map,
+					icon: icon
 				})
 			}
 
@@ -57,13 +63,18 @@
 
 				coordinates = pos.coords;
 				map.setCenter( {lat: coordinates.latitude, lng: coordinates.longitude});
-				myImage = "https://cdn3.iconfinder.com/data/icons/map/500/around_me-128.png"
+
+				myIcon = {
+
+					url: "https://cdn3.iconfinder.com/data/icons/map/500/around_me-128.png",
+					scaledSize: new google.maps.Size(75, 75)
+				}
 
 				marker = new google.maps.Marker({
 
 					position: new google.maps.LatLng(coordinates.latitude, coordinates.longitude),
 					map: map,
-					icon: myImage
+					icon: myIcon
 				})
 				
 				myInfoWindow = new google.maps.InfoWindow({
