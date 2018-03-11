@@ -19,7 +19,39 @@
 			var marker;
 			var myImage;
 			var myInfoWindow;
-			var xhr
+			var xhr;
+			var tempMarker
+
+			function addPassenger(passenger) {
+
+				tempMarker = new google.maps.Marker({
+
+				position: new google.maps.LatLng(passenger.lat, passenger.lng),
+				map: map
+			
+				})
+			}
+
+			function recievePositions(information) {
+
+				doneParsing = JSON.parse(information);
+
+				if (doneParsing.passengers.length == undefined){
+
+					for (i = 0; i < doneParsing.vehicles.length; ++i) {
+
+						addVehicle(doneParsing.vehicles[i]);
+					}
+				}
+
+				else{
+
+					for (i = 0; i < doneParsing.passengers.length; ++i) {
+
+						addPassenger(doneParsing.passengers[i]);
+					}					
+				}
+			}
 
 			function sendPosition(pos) {
 
@@ -47,29 +79,29 @@
 
 					if(xhr.readyState == 4 && xhr.status == 200){
 
-						console.log(xhr.responseText);
+						recievePositions(xhr.responseText);
 					}
 				}
 
 				xhr.send("username=oSsnoj2RLW&lat=" + coordinates.latitude + "&lng=" + coordinates.longitude);
-
 			}
+
+
 
 			function error(err) {
   			
   				console.warn(`ERROR(${err.code}): ${err.message}`);
 			}
 
-			navigator.geolocation.getCurrentPosition(sendPosition, error);
-
-
 			function initMap() {
 
 				map = new google.maps.Map(document.getElementById("map"), {
 					center: {lat: 42.424, lng: -71.109},
-					zoom: 16
+					zoom: 15.5
 				});				
 			}
+
+			navigator.geolocation.getCurrentPosition(sendPosition, error);
 
 		</script>
 
