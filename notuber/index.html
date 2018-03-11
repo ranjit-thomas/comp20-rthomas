@@ -17,7 +17,7 @@
 			var coordinates;
 			var xhr;
 
-			function addVehicle(vehicle) {
+			function addVehicle(vehicle, tempMarker) {
 
 				icon = {
 
@@ -34,7 +34,7 @@
 				})
 			}
 
-			function addPassenger(passenger) {
+			function addPassenger(passenger, tempMarker) {
 
 				icon = {
 
@@ -48,6 +48,16 @@
 					map: map,
 					icon: icon
 				})
+
+				infoWindow = new google.maps.InfoWindow({
+
+					content: "some dead man"
+  				});
+
+  				tempMarker.addListener("click", function(){
+
+  					infoWindow.open(map, tempMarker);
+  				});
 			}
 
 			function recievePositions(information) {
@@ -56,17 +66,19 @@
 
 				if (doneParsing.passengers.length == undefined){
 
+					tempMarker = new Array (doneParsing.vehicles.length)
 					for (i = 0; i < doneParsing.vehicles.length; ++i) {
 
-						addVehicle(doneParsing.vehicles[i]);
+						addVehicle(doneParsing.vehicles[i], tempMarker[i]);
 					}
 				}
 
 				else{
 
+					tempMarker = new Array (doneParsing.passengers.length)
 					for (i = 0; i < doneParsing.passengers.length; ++i) {
 
-						addPassenger(doneParsing.passengers[i]);
+						addPassenger(doneParsing.passengers[i], tempMarker[i]);
 					}					
 				}
 			}
@@ -91,10 +103,13 @@
 				
 				myInfoWindow = new google.maps.InfoWindow({
 					
-					content: "Hello!!!!"
+					content: "Loading distance to nearest car... "
 				});
 
-				myInfoWindow.open(map, myMarker);
+				myMarker.addListener("click", function(){
+
+  					myInfoWindow.open(map, myMarker);
+  				});
 
 				xhr = new XMLHttpRequest();
 				xhr.open("Post", "https://jordan-marsh.herokuapp.com/rides", true);
