@@ -14,20 +14,23 @@
 
 		<script>
 			var map;
-			var position;
-
-			function initMap() {
-
-				map = new google.maps.Map(document.getElementById("map"), {
-					center: {lat: 42.424, lng: -71.109},
-					zoom: 8
-				});				
-			}
+			var coordinates;
+			var me;
+			var myFeature;
+			var marker;
 
 			function sendPosition(pos) {
 
-				var coordinates = pos.coords;
-				alert(coordinates.latitude);
+				coordinates = pos.coords;
+				map.setCenter( {lat: coordinates.latitude, lng: coordinates.longitude});
+				marker = new google.maps.Marker({
+
+					position: new google.maps.LatLng(coordinates.latitude, coordinates.longitude),
+					map: map,
+					title: ("Hello World")
+				})
+				//myFeature = map.data.add();
+				//myFeature.setGeometry(newGeometry: );
 			}
 
 			function error(err) {
@@ -36,6 +39,15 @@
 			}
 
 			navigator.geolocation.getCurrentPosition(sendPosition, error);
+
+
+			function initMap() {
+
+				map = new google.maps.Map(document.getElementById("map"), {
+					center: {lat: 42.424, lng: -71.109},
+					zoom: 12
+				});				
+			}
 
 		</script>
 
