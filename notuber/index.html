@@ -17,6 +17,9 @@
 			var coordinates;
 			var xhr;
 			var smallestDistance = 10000000000;
+			var myContent;
+			var theirContent;
+			var myInfoWindow;
 
 			function toRadians(angle) {
 
@@ -37,7 +40,7 @@
 				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
 				var d = R * c;
-				return d;
+				return d * 0.000621371;
 			}
 
 			function addVehicle(vehicle, tempMarker, tempWindow) {
@@ -56,13 +59,24 @@
 					icon: icon
 				})
 
+				distance = calculateDistance(vehicle.lat, vehicle.lng, coordinates.latitude, coordinates.longitude);
+
+				if (distance < smallestDistance) {
+
+					smallestDistance = distance;
+					theirContent = "username: oSsnoj2RLW" + "<br/>" + "distance away from closest user: " + smallestDistance + " miles";
+				}
+
+				content = "username: " + vehicle.username + "<br/>" + "distance away from me: " + distance + " miles";
+
 				tempWindow = new google.maps.InfoWindow({
 
-//					content: "some dead man"
+					content: content
   				});
 
   				tempMarker.addListener("click", function(){
 
+					myInfoWindow.setContent(theirContent);
   					tempWindow.open(map, tempMarker);
   				});
 			}
@@ -83,7 +97,14 @@
 				})
 
 				distance = calculateDistance(passenger.lat, passenger.lng, coordinates.latitude, coordinates.longitude);
-				content = "username: " + passenger.username + "<br/>" + "distance away from me: " + distance + " meters"
+
+				if (distance < smallestDistance) {
+
+					smallestDistance = distance;
+					theirContent = "username: oSsnoj2RLW" + "<br/>" + "distance away from closest user: " + smallestDistance + " miles";
+				}
+
+				content = "username: " + passenger.username + "<br/>" + "distance away from me: " + distance + " miles";
 
 				tempWindow = new google.maps.InfoWindow({
 
@@ -92,6 +113,7 @@
 
   				tempMarker.addListener("click", function(){
 
+					myInfoWindow.setContent(theirContent);
   					tempWindow.open(map, tempMarker);
   				});
 			}
@@ -100,26 +122,48 @@
 
 				doneParsing = JSON.parse(information);
 
-				if (doneParsing.passengers.length == undefined){
+				if (doneParsing.passengers == undefined){
 
-					tempMarker = new Array (doneParsing.vehicles.length)
-					tempWindow = new Array (doneParsing.vehicles.length)
+					tempMarker = new Array (doneParsing.vehicles.length);
+					tempWindow = new Array (doneParsing.vehicles.length);
+					contentString = "Locations of all vehicles:";
 
 					for (i = 0; i < doneParsing.vehicles.length; ++i) {
 
 						addVehicle(doneParsing.vehicles[i], tempMarker[i], tempWindow[i]);
+						contentString = contentString + "</br>lat: " + doneParsing.vehicles[i].lat + "    lng: " + doneParsing.vehicles[i].lng;
 					}
+
+					var infowindow = new google.maps.InfoWindow({
+
+						content: contentString
+					});
+
+					infowindow.setPosition({lat: coordinates.latitude + .004, lng: coordinates.longitude + .004}); 
+
+					infowindow.open(map);
 				}
 
 				else{
 
-					tempMarker = new Array (doneParsing.passengers.length)
-					tempWindow = new Array (doneParsing.passengers.length)
+					tempMarker = new Array (doneParsing.passengers.length);
+					tempWindow = new Array (doneParsing.passengers.length);
+					contentString = "Locations of all passengers:";
 
 					for (i = 0; i < doneParsing.passengers.length; ++i) {
 
 						addPassenger(doneParsing.passengers[i], tempMarker[i], tempWindow[i]);
-					}					
+						contentString = contentString + "</br>lat: " + doneParsing.passengers[i].lat + "    lng: " + doneParsing.passengers[i].lng;
+					}
+
+					var infowindow = new google.maps.InfoWindow({
+
+						content: contentString
+					});
+
+					infowindow.setPosition({lat: coordinates.latitude + .004, lng: coordinates.longitude + .004}); 
+
+					infowindow.open(map);					
 				}
 			}
 
@@ -142,13 +186,17 @@
 					icon: myIcon
 				})
 				
+				myContent = "username: oSsnoj2RLW" + "<br/>" + "distance away from closest user: " + smallestDistance + " miles";
+
 				myInfoWindow = new google.maps.InfoWindow({
 					
-					content: "Loading distance to nearest car... "
+					content: myContent
 				});
 
 				myMarker.addListener("click", function(){
 
+					myContent = "username: oSsnoj2RLW" + "<br/>" + "distance away from closest user: " + smallestDistance + " miles";
+					myInfoWindow.setContent(myContent);
   					myInfoWindow.open(map, myMarker);
   				});
 
