@@ -62,9 +62,10 @@
 
 				content = "username: " + vehicle.username + "<br/>" + "distance away from me: " + distance + " miles";
 
+				myLatLng = new google.maps.LatLng(vehicle.lat, vehicle.lng);
 				tempMarker = new google.maps.Marker({
 
-					position: new google.maps.LatLng(vehicle.lat, vehicle.lng),
+					position: myLatLng,
 					map: map,
 					icon: icon,
 					content: content
@@ -84,13 +85,6 @@
 					url: "https://cdn4.iconfinder.com/data/icons/dot/128/taxi_passanger.png",
 					scaledSize: new google.maps.Size(35, 35)
 				}
-
-				tempMarker = new google.maps.Marker({
-
-					position: new google.maps.LatLng(passenger.lat, passenger.lng),
-					map: map,
-					icon: icon
-				})
 
 				distance = calculateDistance(passenger.lat, passenger.lng, coordinates.latitude, coordinates.longitude);
 
@@ -138,7 +132,7 @@
 						content: contentString
 					});
 
-					infowindow.setPosition({lat: coordinates.latitude + .004, lng: coordinates.longitude + .004}); 
+					infowindow.setPosition({lat: coordinates.latitude + .02, lng: coordinates.longitude + .02}); 
 
 					infowindow.open(map);
 				}
@@ -169,7 +163,7 @@
 
 				coordinates = pos.coords;
 				map.setCenter( {lat: coordinates.latitude, lng: coordinates.longitude});
-				map.setZoom(15.5);
+				map.setZoom(12);
 
 				myIcon = {
 
