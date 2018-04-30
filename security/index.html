@@ -8,6 +8,7 @@
 	</head>
 
 	<body>
+		<h1>Ranjit Thomas: Assignment Four- An Exploration of Security</h1>
 		<h2>Introduction</h2>
 		<p>A thorough security and technical analysis was done of Kevin Lee's app for notuber.  Notuber is an app
 			designed to work like uber.  It takes in coordinates from both passengers and vehicles, and depending
@@ -35,9 +36,38 @@
 			on the applications' server.  Though it was important to do this for the sake of the application's
 		purpose, enabling unrestricted CORS could lead to a major security breach.</p>
 		<h2>Issues Found and Technical Analysis of Issues Found</h2>
-		<h1>Inability to Respond to Non-Float Inputs</h1>
-		<h1>Easy to Crash Server</h1>
-		<h1>Unrestricted Cross-Orgin-Sharing</h1>
+		<h4>Inability to Respond to Non-Float Inputs</h4>
+		<p>An Cross-Site Scripting attack was attempted to reveal any security holes in the way the code was sending
+			and recieving data.  Interestingly enough, the server side's code was written in such a way that the
+			input sent from the client would be parsed and all unexpected characters would be removed.  This
+			prevented any malicious script from making a particularly dangerous impact on the client.  However, in
+			the proccess of doing this, it was also found that the application is able to remove said characters,
+			but is unable to differentiate a client's input between a string and a floating int.  Therefore, when
+			the application attempted to return the coordinates it would return "NaN" which corresponds with "not a
+			number".  The application should have checked if the input was a floating int in the first place and
+		rejected the data if it was found that it was not. </p>
+		<img src="Example1.png" alt="Screenshot of Attempted XXS attack">
+		<h4>Easy to Crash Server</h4>
+		<p>A mongodb injection was done as an attempt to return data from the mongodatabase.  It was a rather
+			simple proccess, the injection entailed requesting all the information for the vehicles without a specific
+			username specified.  A malicious user could use the ".vehicle/json" path to return the accoutn information
+			of all the vehicles whose usernames weren't an empty string (aka all the users).  When this was attempted,
+			the server crashed.  Though this is better than a hacker attaining all the information in the database,
+			it is not ideal as the server was forced to crash.  A better method of handling this situation would
+			have been to identify this case in the server-side code and be sure that the data that was sent back
+		would be an empty string. </p>
+		<img src="Example2.png" alt="Screenshot of Attempted Mongodb Injection">
+		<h4>Unrestricted Cross-Orgin-Sharing</h4>
+		<p>Cross-Origin Resource Sharing (CORS) is a method by which a user operating on one server can recieve 
+			permission to access assets from another dommain.   A user can make a cross-origin HTTP request
+			when it requests a resource from a domain, protocol, or port different than its own.  For security reasons,
+			it is by default disallowed for any application to request HTTP resources from anywhere other than the
+			same domain it was loaded from (same-orgin policy).  The code for this application undoes all this by
+			explicity allowing all Cross-Orgin Resource Sharing.  Though this was a necessity for the sake of the
+			app doing what it was designed to do, it was still a security risk to include the few lines of code that
+			allowed this unrestricted CORS as any malicious user could theoritically have access to all the resources
+		on the apps server. </p>
+		<img src="Example3.png" alt="Screenshot of Serverside Code">
 		<h2>Conclusion</h2>
 		<h2>References</h2>
 		<p> https://tuftsdev.github.io/WebProgramming/notes/web_security.html </p>

@@ -1,3 +1,9 @@
 body{
-	background-color: 6F9FD8;
+	background-color: LightBlue;
+}
+
+h1{
+	text-align: center;
+	color: DarkCyan;
+	font-size: 300%;
 }
