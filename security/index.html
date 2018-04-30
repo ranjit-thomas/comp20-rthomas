@@ -23,7 +23,20 @@
 			Finally, a simple read-over of the code was done to reveal any other blatant issues with the code that
 		would have lead to security breachings. </p>
 		<h2>Abstract of Findings</h2>
+		<p>There were a couple issues with the application's code.  Firstly, his code was unable to appropriately
+			respond to situations where the client sends a non-number as a coordinate for either the longitude or
+			latitude.  Secondly, the application's server crashes if a mongodb injection is attempted (which is
+			essentially an attempt to access the information in the database of the server).  While it is in
+			theory better that the server crashes than provide a malicious user information that they should not
+			have access to, it still fails to protect itself from a mongodb injection since the server ends up
+			crashing.  Lastly, the application as a whole is not very secure since it enables full, unrestricted
+			cross-orgin resource sharing (CORS).  This means that a user from any domain can access the assets
+			on the applications' server.  Though it was important to do this for the sake of the application's
+		purpose, enabling unrestricted CORS could lead to a major security breach.</p>
 		<h2>Issues Found and Technical Analysis of Issues Found</h2>
+		<h1>Inability to Respond to Non-Float Inputs</h1>
+		<h1>Easy to Crash Server</h1>
+		<h1>Unrestricted Cross-Orgin-Sharing</h1>
 		<h2>Conclusion</h2>
 		<h2>References</h2>
 		<p> https://tuftsdev.github.io/WebProgramming/notes/web_security.html </p>
