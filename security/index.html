@@ -69,6 +69,13 @@
 		on the apps server. </p>
 		<img src="Example3.png" alt="Screenshot of Serverside Code">
 		<h2>Conclusion</h2>
+		<p>The application avoids all major security flaws that were searched for in the testing procces.  It seems
+			decently secure, however it is the way that the application responds to attempted breaches which is
+			inadequate.  The server should not immidiately crash simply because URL query does not match the exact
+			format as expected.  Additionally, there were places where there were no holes because the application
+			currently resides on a smaller scale with around fifty total users.  If it were to expand, the code
+			would definately have to change so that it was not allowing CORS in the unlimited way it seems to at the
+		moment.  All in all, the application was secure enough for the purposes of the class. </p>
 		<h2>References</h2>
 		<p> https://tuftsdev.github.io/WebProgramming/notes/web_security.html </p>
 	</body>
